@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barriecito&display=swap" rel="stylesheet">
+  <title>Grid</title>
+  <style>
+
+    *, *::before, *::after {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><rect x='10' y='2' width='2' height='2' fill='%23a8d8a8'/><rect x='18' y='2' width='2' height='2' fill='%23a8d8a8'/><rect x='10' y='4' width='2' height='6' fill='%23a8d8a8'/><rect x='18' y='4' width='2' height='6' fill='%23a8d8a8'/><rect x='12' y='6' width='6' height='2' fill='%23a8d8a8'/><rect x='6' y='10' width='8' height='8' fill='%23e07856'/><rect x='7' y='9' width='6' height='2' fill='%23e07856'/><rect x='5' y='12' width='2' height='4' fill='%23e07856'/><rect x='13' y='12' width='2' height='4' fill='%23e07856'/><rect x='7' y='17' width='6' height='2' fill='%23e07856'/><rect x='16' y='10' width='8' height='8' fill='%23e07856'/><rect x='17' y='9' width='6' height='2' fill='%23e07856'/><rect x='15' y='12' width='2' height='4' fill='%23e07856'/><rect x='23' y='12' width='2' height='4' fill='%23e07856'/><rect x='17' y='17' width='6' height='2' fill='%23e07856'/><rect x='8' y='11' width='2' height='2' fill='%23f4a090'/><rect x='18' y='11' width='2' height='2' fill='%23f4a090'/></svg>") 16 16, auto !important;
+}
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: #f0ece0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      font-family: "Barriecito", system-ui;
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><rect x='10' y='2' width='2' height='2' fill='%23a8d8a8'/><rect x='18' y='2' width='2' height='2' fill='%23a8d8a8'/><rect x='10' y='4' width='2' height='6' fill='%23a8d8a8'/><rect x='18' y='4' width='2' height='6' fill='%23a8d8a8'/><rect x='12' y='6' width='6' height='2' fill='%23a8d8a8'/><rect x='6' y='10' width='8' height='8' fill='%23e07856'/><rect x='7' y='9' width='6' height='2' fill='%23e07856'/><rect x='5' y='12' width='2' height='4' fill='%23e07856'/><rect x='13' y='12' width='2' height='4' fill='%23e07856'/><rect x='7' y='17' width='6' height='2' fill='%23e07856'/><rect x='16' y='10' width='8' height='8' fill='%23e07856'/><rect x='17' y='9' width='6' height='2' fill='%23e07856'/><rect x='15' y='12' width='2' height='4' fill='%23e07856'/><rect x='23' y='12' width='2' height='4' fill='%23e07856'/><rect x='17' y='17' width='6' height='2' fill='%23e07856'/><rect x='8' y='11' width='2' height='2' fill='%23f4a090'/><rect x='18' y='11' width='2' height='2' fill='%23f4a090'/></svg>") 16 16, auto;
+}
+
+
+
+.popup-panel {
+    position: fixed;       /* stays in place when scrolling */
+    top: 0;
+    right: -500px;         /* hidden off screen to the right */
+    width: 400px;
+    height: 100%;
+    background-color: #f0ece0;
+    box-shadow: -4px 0px 15px rgba(164, 135, 98, 0.3);
+    padding: 30px;
+    transition: right 0.3s ease;   /* smooth slide animation */
+    z-index: 999;
+    font-family: "Barriecito", system-ui ;
+    color: #5aabb5;
+}
+
+/* When panel is active/open */
+.popup-panel.active {
+    right: 0;              /* slides into view */
+}
+
+
+
+img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+
+.switch {
+    padding: 6px 22px;
+    background-color: #BAA345;
+    font-family:"Barriecito", system-ui  ;
+    color: #f0ece0;
+    border: 0.5px;
+    border-radius: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.switch:hover {
+    background-color: #BAA345;
+    transform: scale(1.05);
+}
+
+
+
+
+    
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .level-label {
+      font-size: 30px;
+      color: #F6A9B9;
+      letter-spacing: 0.05em;
+    }
+
+    .next-btn {
+      font-family: "Barriecito", system-ui;
+      padding: 8px 20px;
+      background-color: #F6A9B9;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+    }
+
+    .next-btn:hover {
+      background-color: #F6A9B9;
+    }
+
+    .grid-container {
+      --cell: 28px;
+      --cols: 40;
+      --rows: 18;
+
+      width: calc(var(--cell) * var(--cols));
+      height: calc(var(--cell) * var(--rows));
+
+      display: grid;
+      grid-template-columns: repeat(40, var(--cell));
+      grid-template-rows: repeat(18, var(--cell));
+
+      border: 1px solid #5aabb5;
+    }
+
+    button.cell {
+      width: var(--cell);
+      height: var(--cell);
+      border: 0.5px solid #5aabb5;
+      background-color: #f0ece0;
+      padding: 0;
+      cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    button.cell.clickable {
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><rect x='10' y='2' width='2' height='2' fill='%23a8d8a8'/><rect x='18' y='2' width='2' height='2' fill='%23a8d8a8'/><rect x='10' y='4' width='2' height='6' fill='%23a8d8a8'/><rect x='18' y='4' width='2' height='6' fill='%23a8d8a8'/><rect x='12' y='6' width='6' height='2' fill='%23a8d8a8'/><rect x='6' y='10' width='8' height='8' fill='%23e07856'/><rect x='7' y='9' width='6' height='2' fill='%23e07856'/><rect x='5' y='12' width='2' height='4' fill='%23e07856'/><rect x='13' y='12' width='2' height='4' fill='%23e07856'/><rect x='7' y='17' width='6' height='2' fill='%23e07856'/><rect x='16' y='10' width='8' height='8' fill='%23e07856'/><rect x='17' y='9' width='6' height='2' fill='%23e07856'/><rect x='15' y='12' width='2' height='4' fill='%23e07856'/><rect x='23' y='12' width='2' height='4' fill='%23e07856'/><rect x='17' y='17' width='6' height='2' fill='%23e07856'/><rect x='8' y='11' width='2' height='2' fill='%23f4a090'/><rect x='18' y='11' width='2' height='2' fill='%23f4a090'/></svg>") 16 16, auto;
+    }
+
+    .circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      display: block;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Button to trigger popup -->
+<button class="switch" onclick="togglePopup()">do u need a hint? (^_−)−☆</button>
+
+<!-- Popup Panel -->
+<div class="popup-panel" id="popupPanel">
+    <img src="Images/Screenshot 2026-03-31 at 13.26.42.png" alt="image" />
+    <p>here's what it should look like...</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="controls">
+    <span class="level-label" id="level-label">Level 1 Tulip</span>
+    <button class="next-btn" id="next-btn">Next</button>
+  </div>
+
+  <div class="grid-container" id="grid"></div>
+
+  <script>
+
+    function togglePopup() {
+        const panel = document.getElementById("popupPanel");
+        panel.classList.toggle("active");
+    }
+
+
+
+
+
+    const cols = 40;
+    const rows = 18;
+
+    const levels = [
+      {
+        name: "Tulip",
+        cells: [
+          // Pink flower head
+          {r:6,c:4,color:"#f4a7c3"},{r:6,c:6,color:"#f4a7c3"},{r:6,c:8,color:"#f4a7c3"},
+          {r:7,c:4,color:"#f4a7c3"},{r:7,c:5,color:"#f4a7c3"},{r:7,c:6,color:"#f4a7c3"},{r:7,c:8,color:"#f4a7c3"},
+          {r:8,c:5,color:"#f4a7c3"},{r:8,c:6,color:"#f4a7c3"},{r:8,c:7,color:"#f4a7c3"},{r:8,c:8,color:"#f4a7c3"},
+          {r:9,c:4,color:"#f4a7c3"},{r:9,c:5,color:"#f4a7c3"},{r:9,c:6,color:"#f4a7c3"},{r:9,c:7,color:"#f4a7c3"},
+          {r:10,c:5,color:"#f4a7c3"},{r:10,c:6,color:"#f4a7c3"},{r:10,c:7,color:"#f4a7c3"},
+          // Stem
+          {r:11,c:6,color:"#a8d8a8"},{r:12,c:6,color:"#a8d8a8"},{r:13,c:4,color:"#a8d8a8"},
+          {r:13,c:6,color:"#a8d8a8"},{r:14,c:4,color:"#a8d8a8"},{r:14,c:5,color:"#a8d8a8"},
+          {r:14,c:6,color:"#a8d8a8"},{r:15,c:6,color:"#a8d8a8"},{r:15,c:8,color:"#a8d8a8"},
+          {r:16,c:6,color:"#a8d8a8"},{r:16,c:7,color:"#a8d8a8"},{r:17,c:6,color:"#a8d8a8"},
+          
+        ]
+      },
+      {
+        name: "Cherry",
+        cells: [
+          // Left cherry
+          {r:4,c:11,color:"#e07856"},{r:4,c:12,color:"#e07856"},{r:4,c:13,color:"#e07856"},
+          {r:5,c:10,color:"#e07856"},{r:5,c:11,color:"#e07856"},{r:5,c:12,color:"#e07856"},{r:5,c:13,color:"#e07856"},{r:5,c:14,color:"#e07856"},
+          {r:6,c:10,color:"#e07856"},{r:6,c:11,color:"#e07856"},{r:6,c:12,color:"#e07856"},{r:6,c:13,color:"#e07856"},{r:6,c:14,color:"#e07856"},
+          {r:7,c:11,color:"#e07856"},{r:7,c:12,color:"#e07856"},{r:7,c:13,color:"#e07856"},
+          // Right cherry
+          {r:6,c:17,color:"#e07856"},{r:6,c:18,color:"#e07856"},{r:6,c:19,color:"#e07856"},
+          {r:7,c:16,color:"#e07856"},{r:7,c:17,color:"#e07856"},{r:7,c:18,color:"#e07856"},{r:7,c:19,color:"#e07856"},{r:7,c:20,color:"#e07856"},
+          {r:8,c:16,color:"#e07856"},{r:8,c:17,color:"#e07856"},{r:8,c:18,color:"#e07856"},{r:8,c:19,color:"#e07856"},{r:8,c:20,color:"#e07856"},
+          {r:9,c:17,color:"#e07856"},{r:9,c:18,color:"#e07856"},{r:9,c:19,color:"#e07856"},
+          // Stems
+          {r:0,c:16,color:"#a8d8a8"},
+          {r:1,c:15,color:"#a8d8a8"},{r:1,c:16,color:"#a8d8a8"},
+          {r:2,c:14,color:"#a8d8a8"},{r:2,c:16,color:"#a8d8a8"},
+          {r:3,c:13,color:"#a8d8a8"},{r:3,c:17,color:"#a8d8a8"},
+          {r:4,c:17,color:"#a8d8a8"},
+          {r:5,c:18,color:"#a8d8a8"},
+        ]
+      },
+      {
+        name: "Lavender",
+        cells: [
+          // Stem
+          {r:7,c:25,color:"#b8a8c8"},{r:8,c:25,color:"#b8a8c8"},
+          {r:9,c:25,color:"#8AA888"},{r:10,c:25,color:"#8AA888"},
+          {r:11,c:25,color:"#8AA888"},{r:12,c:25,color:"#8AA888"},
+          {r:13,c:25,color:"#8AA888"},{r:14,c:25,color:"#8AA888"},
+          {r:15,c:25,color:"#8AA888"},{r:16,c:25,color:"#8AA888"},{r:17,c:25,color:"#8AA888"},
+          // Left buds
+          {r:8,c:24,color:"#b8a8c8"},{r:10,c:23,color:"#b8a8c8"},
+          {r:11,c:24,color:"#b8a8c8"},{r:13,c:23,color:"#b8a8c8"},
+          {r:14,c:24,color:"#b8a8c8"},{r:15,c:22,color:"#b8a8c8"},
+          {r:16,c:23,color:"#b8a8c8"},{r:16,c:24,color:"#b8a8c8"},
+          // Right buds
+          {r:8,c:26,color:"#b8a8c8"},{r:10,c:27,color:"#b8a8c8"},
+          {r:11,c:26,color:"#b8a8c8"},{r:13,c:27,color:"#b8a8c8"},
+          {r:14,c:26,color:"#b8a8c8"},{r:15,c:28,color:"#b8a8c8"},
+          {r:16,c:26,color:"#b8a8c8"},{r:16,c:27,color:"#b8a8c8"},
+        ]
+      },
+      {
+        name: "Pear",
+        cells: [
+          // Stem & leaf
+          {r:1,c:37,color:"#a8d8a8"},{r:1,c:38,color:"#a8d8a8"},
+          {r:2,c:36,color:"#a8d8a8"},{r:2,c:37,color:"#a8d8a8"},
+          // Pear body
+          {r:3,c:35,color:"#d4e08a"},{r:3,c:36,color:"#d4e08a"},
+          {r:4,c:34,color:"#d4e08a"},{r:4,c:35,color:"#e8d898"},{r:4,c:36,color:"#e8d898"},{r:4,c:37,color:"#d4e08a"},
+          {r:5,c:34,color:"#d4e08a"},{r:5,c:35,color:"#e8d898"},{r:5,c:36,color:"#e8d898"},{r:5,c:37,color:"#d4e08a"},
+          {r:6,c:34,color:"#d4e08a"},{r:6,c:35,color:"#e8d898"},{r:6,c:36,color:"#e8d898"},{r:6,c:37,color:"#d4e08a"},
+          {r:7,c:33,color:"#d4e08a"},{r:7,c:34,color:"#e8d898"},{r:7,c:35,color:"#e8d898"},{r:7,c:36,color:"#e8d898"},{r:7,c:37,color:"#e8d898"},{r:7,c:38,color:"#d4e08a"},
+          {r:8,c:33,color:"#d4e08a"},{r:8,c:34,color:"#e8d898"},{r:8,c:35,color:"#8b6914"},{r:8,c:36,color:"#8b6914"},{r:8,c:37,color:"#e8d898"},{r:8,c:38,color:"#d4e08a"},
+          {r:9,c:33,color:"#d4e08a"},{r:9,c:34,color:"#e8d898"},{r:9,c:35,color:"#8b6914"},{r:9,c:36,color:"#8b6914"},{r:9,c:37,color:"#e8d898"},{r:9,c:38,color:"#d4e08a"},
+          {r:10,c:33,color:"#d4e08a"},{r:10,c:34,color:"#e8d898"},{r:10,c:35,color:"#e8d898"},{r:10,c:36,color:"#e8d898"},{r:10,c:37,color:"#e8d898"},{r:10,c:38,color:"#d4e08a"},
+          {r:11,c:34,color:"#d4e08a"},{r:11,c:35,color:"#d4e08a"},{r:11,c:36,color:"#d4e08a"},{r:11,c:37,color:"#d4e08a"},
+        ]
+      },
+      {
+        name: "Weiner Dog",
+        cells: [
+          // Top left flower
+          {r:12,c:17,color:"#ECA676"},{r:12,c:18,color:"#ECA676"},{r:12,c:19,color:"#ECA676"},
+          {r:13,c:10,color:"#ECA676"},{r:13,c:16,color:"#AA7367"},{r:13,c:17,color:"#ECA676"},{r:13,c:18,color:"#ECA676"},{r:13,c:19,color:"#ECA676"},
+          {r:14,c:11,color:"#ECA676"},{r:14,c:12,color:"#ECA676"},{r:14,c:13,color:"#BBD8ED"},{r:14,c:14,color:"#BBD8ED"},{r:14,c:15,color:"#BBD8ED"},{r:14,c:16,color:"#71A9D3"},{r:14,c:17,color:"#71A9D3"},
+          {r:15,c:11,color:"#ECA676"},{r:15,c:12,color:"#ECA676"},{r:15,c:13,color:"#BBD8ED"},{r:15,c:14,color:"#BBD8ED"},{r:15,c:15,color:"#BBD8ED"},{r:15,c:16,color:"#71A9D3"},{r:15,c:17,color:"#71A9D3"},
+          {r:16,c:11,color:"#ECA676"},{r:16,c:12,color:"#ECA676"},{r:16,c:13,color:"#BBD8ED"},{r:16,c:14,color:"#BBD8ED"},{r:16,c:15,color:"#BBD8ED"},{r:16,c:16,color:"#71A9D3"},{r:16,c:17,color:"#71A9D3"},
+          {r:17,c:10,color:"#ECA676"},{r:17,c:18,color:"#ECA676"},
+        ]
+      }
+    ];
+
+    const grid = document.getElementById('grid');
+    const nextBtn = document.getElementById('next-btn');
+    const levelLabel = document.getElementById('level-label');
+
+    let currentLevel = 0;
+    let cellMap = {};
+
+    // Build grid
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const btn = document.createElement('button');
+        btn.classList.add('cell');
+        btn.dataset.r = r;
+        btn.dataset.c = c;
+        cellMap[`${r},${c}`] = btn;
+        grid.appendChild(btn);
+      }
+    }
+
+    function loadLevel(levelIndex) {
+      const level = levels[levelIndex];
+      levelLabel.textContent = `Level ${levelIndex + 1}  ${level.name}`;
+      nextBtn.style.display = 'none';
+
+      level.cells.forEach(({r, c, color}) => {
+        const btn = cellMap[`${r},${c}`];
+        btn.classList.add('clickable');
+        btn.setAttribute('data-color', color);
+
+        // Only add circle once
+        if (!btn.querySelector('.circle')) {
+          const circle = document.createElement('span');
+          circle.classList.add('circle');
+          circle.style.backgroundColor = color;
+          btn.appendChild(circle);
+
+          btn.addEventListener('mouseenter', () => {
+            if (!btn.classList.contains('active')) circle.style.opacity = '0.4';
+          });
+
+          btn.addEventListener('mouseleave', () => {
+            if (!btn.classList.contains('active')) circle.style.opacity = '0';
+          });
+
+          btn.addEventListener('click', () => {
+            btn.classList.toggle('active');
+            circle.style.opacity = btn.classList.contains('active') ? '1' : '0';
+            checkLevelComplete(currentLevel);
+          });
+        }
+      });
+    }
+
+    function checkLevelComplete(levelIndex) {
+      const level = levels[levelIndex];
+      const allDone = level.cells.every(({r, c}) => cellMap[`${r},${c}`].classList.contains('active'));
+      if (allDone) {
+        if (levelIndex < levels.length - 1) {
+          nextBtn.style.display = 'inline-block';
+        } else {
+          levelLabel.textContent = 'All done!';
+        }
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentLevel++;
+      if (currentLevel < levels.length) loadLevel(currentLevel);
+    });
+
+    loadLevel(0);
+  </script>
+</body>
+</html>
